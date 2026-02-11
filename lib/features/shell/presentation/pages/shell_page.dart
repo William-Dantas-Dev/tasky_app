@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import '../../../home/presentation/pages/home_page.dart';
 import '../providers/shell_nav_provider.dart';
 
 class MainShellPage extends ConsumerWidget {
   const MainShellPage({super.key});
 
   static const List<Widget> _pages = [
-    _ShellPlaceholderPage(title: 'Home'),
+    HomePage(),
     _ShellPlaceholderPage(title: 'Tarefas'),
     _ShellPlaceholderPage(title: 'Hábitos'),
     _ShellPlaceholderPage(title: 'Config'),
