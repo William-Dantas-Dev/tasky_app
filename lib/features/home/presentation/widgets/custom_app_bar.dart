@@ -35,7 +35,12 @@ class CustomAppBar extends StatelessWidget {
       expandedHeight: expandedHeight,
       backgroundColor: cs.primary,
       surfaceTintColor: Colors.transparent,
-      title: const Text('Tasky'),
+      title: const Text(
+        'Tasky',
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ),
       actions: [
         IconButton(
           onPressed: () => AppSnackBar.show(context, 'Notificações (UI) ✅'),
@@ -76,7 +81,9 @@ class CustomAppBar extends StatelessWidget {
                 height: 56,
                 width: double.infinity,
                 child: CustomPaint(
-                  painter: _WavePainter(color: Colors.white.withValues(alpha: 0.16)),
+                  painter: _WavePainter(
+                    color: Colors.white.withValues(alpha: 0.16),
+                  ),
                 ),
               ),
             ),
@@ -133,9 +140,33 @@ class _AuroraPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    _paintRibbon(canvas, size, a.withValues(alpha: 0.22), 0.14, 0.42, 0.78, 0.9);
-    _paintRibbon(canvas, size, b.withValues(alpha: 0.18), 0.02, 0.30, 0.64, 1.25);
-    _paintRibbon(canvas, size, c.withValues(alpha: 0.14), 0.22, 0.52, 0.90, 1.6);
+    _paintRibbon(
+      canvas,
+      size,
+      a.withValues(alpha: 0.22),
+      0.14,
+      0.42,
+      0.78,
+      0.9,
+    );
+    _paintRibbon(
+      canvas,
+      size,
+      b.withValues(alpha: 0.18),
+      0.02,
+      0.30,
+      0.64,
+      1.25,
+    );
+    _paintRibbon(
+      canvas,
+      size,
+      c.withValues(alpha: 0.14),
+      0.22,
+      0.52,
+      0.90,
+      1.6,
+    );
 
     _paintHighlightStreak(canvas, size);
     _paintParticles(canvas, size);

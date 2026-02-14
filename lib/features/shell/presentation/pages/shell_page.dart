@@ -16,6 +16,7 @@ class MainShellPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final index = ref.watch(shellIndexProvider);
+    final theme = Theme.of(context);
 
     return Scaffold(
       body: IndexedStack(index: index, children: _pages),
@@ -23,21 +24,33 @@ class MainShellPage extends ConsumerWidget {
         currentIndex: index,
         onTap: (i) => ref.read(shellIndexProvider.notifier).setIndex(i),
         type: BottomNavigationBarType.fixed,
+
+        // ✅ Destaque visual
+        selectedItemColor: theme.colorScheme.primary,
+        unselectedItemColor: Colors.grey.shade500,
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w700),
+        unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w400),
+        showUnselectedLabels: true,
+
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
+            activeIcon: Icon(Icons.home),
             label: 'Home',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.checklist_rtl_outlined),
+            activeIcon: Icon(Icons.checklist),
             label: 'Tarefas',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.repeat_rounded),
+            activeIcon: Icon(Icons.repeat),
             label: 'Hábitos',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings_outlined),
+            activeIcon: Icon(Icons.settings),
             label: 'Config',
           ),
         ],
@@ -68,7 +81,9 @@ class _ShellPlaceholderPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
-      body: const SizedBox.expand(child: ColoredBox(color: Colors.transparent)),
+      body: const SizedBox.expand(
+        child: ColoredBox(color: Colors.transparent),
+      ),
     );
   }
 }

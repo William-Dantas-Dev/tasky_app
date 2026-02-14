@@ -1,7 +1,24 @@
 enum TaskPriority { low, medium, high }
 
-TaskPriority taskPriorityFromString(String? value) {
-  switch ((value ?? '').toLowerCase()) {
+TaskPriority taskPriorityFromAny(dynamic value) {
+  if (value == null) return TaskPriority.medium;
+
+  // int legado: 0/1/2
+  if (value is int) {
+    if (value <= 0) return TaskPriority.low;
+    if (value == 1) return TaskPriority.medium;
+    return TaskPriority.high;
+  }
+
+  final s = value.toString().trim().toLowerCase();
+
+  // pt-BR (caso tenha sido salvo assim em alguma etapa)
+  if (s == 'baixa') return TaskPriority.low;
+  if (s == 'média' || s == 'media') return TaskPriority.medium;
+  if (s == 'alta') return TaskPriority.high;
+
+  // padrão: low/medium/high
+  switch (s) {
     case 'low':
       return TaskPriority.low;
     case 'high':
@@ -23,9 +40,20 @@ String taskPriorityToString(TaskPriority p) {
   }
 }
 
-DateTime? _dateFromIso(dynamic value) {
+// ✅ aceita String ISO, int (ms), DateTime
+DateTime? _dateFromAny(dynamic value) {
   if (value == null) return null;
-  if (value is String && value.isNotEmpty) return DateTime.tryParse(value);
+
+  if (value is DateTime) return value;
+
+  if (value is int) {
+    return DateTime.fromMillisecondsSinceEpoch(value);
+  }
+
+  if (value is String && value.isNotEmpty) {
+    return DateTime.tryParse(value);
+  }
+
   return null;
 }
 
@@ -108,18 +136,18 @@ class TaskModel {
   }
 
   factory TaskModel.fromMap(Map<String, dynamic> map) {
-    final created = _dateFromIso(map['createdAt']) ?? DateTime.now();
-    final updated = _dateFromIso(map['updatedAt']) ?? created;
+    final created = _dateFromAny(map['createdAt']) ?? DateTime.now();
+    final updated = _dateFromAny(map['updatedAt']) ?? created;
 
     return TaskModel(
-      id: (map['id'] ?? '') as String,
-      userId: (map['userId'] ?? '') as String,
-      title: (map['title'] ?? '') as String,
+      id: (map['id'] ?? '').toString(),
+      userId: (map['userId'] ?? '').toString(),
+      title: (map['title'] ?? '').toString(),
       description: map['description'] as String?,
       isDone: (map['isDone'] ?? false) as bool,
-      priority: taskPriorityFromString(map['priority'] as String?),
+      priority: taskPriorityFromAny(map['priority']),
       categoryId: map['categoryId'] as String?,
-      dueDate: _dateFromIso(map['dueDate']),
+      dueDate: _dateFromAny(map['dueDate']),
       createdAt: created,
       updatedAt: updated,
     );

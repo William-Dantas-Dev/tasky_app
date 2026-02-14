@@ -9,10 +9,7 @@ Future<void> main() async {
 
   // Inicializa Hive
   await Hive.initFlutter();
+  await Hive.openBox<Map>('tasksBox');
 
-  runApp(
-    const ProviderScope(
-      child: MyApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: MyApp()));
 }

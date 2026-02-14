@@ -12,6 +12,8 @@ List<TaskModel> filterTasksByScope(List<TaskModel> tasks, TaskScope scope) {
   bool isUpcoming(DateTime? d) => d != null && !d.isBefore(tomorrow);
 
   switch (scope) {
+    case TaskScope.all:
+      return tasks.where((t) => !t.isDone).toList();
     case TaskScope.today:
       return tasks.where((t) => !t.isDone && isToday(t.dueDate)).toList();
     case TaskScope.overdue:

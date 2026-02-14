@@ -1,1 +1,1 @@
-enum TaskScope { today, overdue, upcoming }
+enum TaskScope { all, today, overdue, upcoming }
