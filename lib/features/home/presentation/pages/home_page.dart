@@ -16,8 +16,8 @@ import '../widgets/quick_grid.dart';
 import '../widgets/scope_chip.dart';
 import '../providers/home_scope_provider.dart';
 import '../../../tasks/domain/task_scope.dart';
-import '../../../tasks/application/providers/task_focus_provider.dart';
 import '../../../tasks/application/providers/task_summary_provider.dart';
+import '../../providers/focus_providers.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -47,7 +47,19 @@ class HomePage extends ConsumerWidget {
     final theme = Theme.of(context);
 
     final summary = ref.watch(taskSummaryProvider);
-    final focus = ref.watch(taskFocusProvider);
+
+    final session = ref.watch(focusControllerProvider);
+    final controller = ref.read(focusControllerProvider.notifier);
+
+    final subtitle =
+        '${session.phaseLabel} • ${session.timeLeftText} • ${session.focus.subtitle}';
+
+    final primaryText = switch (session.status) {
+      PomodoroStatus.running => 'Pausar',
+      PomodoroStatus.paused => 'Retomar',
+      PomodoroStatus.finished => 'Reiniciar',
+      PomodoroStatus.idle => 'Iniciar',
+    };
 
     final scope = ref.watch(homeScopeProvider);
     final filtered = ref.watch(homeFilteredTasksProvider);
@@ -72,16 +84,32 @@ class HomePage extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     FocusCard(
-                      title: focus.title,
-                      subtitle: focus.subtitle,
-                      tag: focus.tag,
-                      done: focus.done,
-                      progress: summary.progress,
-                      onPrimary: () =>
-                          AppSnackBar.show(context, 'Iniciar foco (UI) ✅'),
-                      onSecondary: () =>
-                          AppSnackBar.show(context, 'Marcar como feita (UI) ✅'),
+                      title: session.focus.title,
+                      subtitle: subtitle,
+                      tag: session.focus.tag,
+                      done: session.focus.done,
+                      progress: session.progress,
+                      isActive: session.isRunning,
+                      primaryText: primaryText,
+
+                      workMinutes: session.workMinutes,
+                      breakMinutes: session.breakMinutes,
+                      onPickDurations: (work, brk) {
+                        // Se você quiser que após aplicar já comece: startAfter: true
+                        controller.setDurations(
+                          workMinutes: work,
+                          breakMinutes: brk,
+                        );
+                        AppSnackBar.show(
+                          context,
+                          'Pomodoro: $work min / pausa: $brk min ⏱️',
+                        );
+                      },
+
+                      onPrimary: controller.toggleRunPause,
+                      onSecondary: controller.markDone,
                     ),
+
                     Gaps.h14,
                     QuickGrid(
                       onAddTask: () => _openCreateTaskSheet(context),
@@ -143,7 +171,6 @@ class HomePage extends ConsumerWidget {
                         ),
                       ],
                     ),
-
                     Gaps.h16,
                     if (filtered.isEmpty)
                       EmptyState(

@@ -286,7 +286,6 @@ class _AuroraPainter extends CustomPainter {
   }
 }
 
-/// Sua wave (mantive sua lógica, só ajustei estilo/nomes)
 class _WavePainter extends CustomPainter {
   final Color color;
 
