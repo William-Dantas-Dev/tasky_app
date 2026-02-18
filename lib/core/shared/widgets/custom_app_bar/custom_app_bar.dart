@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:tasky_app/core/shared/widgets/custom_app_bar/header_app_bar.dart';
 import 'aurora_painter.dart';
@@ -6,8 +5,6 @@ import 'waver_painter.dart';
 
 class CustomAppBar extends StatelessWidget {
   final String dateLabel;
-  final int doneCount;
-  final int totalCount;
   final double progress;
   final double expandedHeight;
   final bool pinned;
@@ -15,10 +12,8 @@ class CustomAppBar extends StatelessWidget {
   const CustomAppBar({
     super.key,
     required this.dateLabel,
-    required this.doneCount,
-    required this.totalCount,
     required this.progress,
-    this.expandedHeight = 200,
+    this.expandedHeight = 130,
     this.pinned = true,
   });
 
@@ -27,8 +22,6 @@ class CustomAppBar extends StatelessWidget {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
-    final pct = max(0, (progress * 100).round());
-
     return SliverAppBar(
       pinned: pinned,
       elevation: 0,
@@ -36,13 +29,6 @@ class CustomAppBar extends StatelessWidget {
       backgroundColor: cs.primary,
       surfaceTintColor: Colors.transparent,
       title: const Text('Tasky', style: TextStyle(color: Colors.white)),
-      actions: [
-        IconButton(
-          onPressed: () => {},
-          icon: const Icon(Icons.notifications_none_rounded),
-        ),
-        const SizedBox(width: 6),
-      ],
       flexibleSpace: FlexibleSpaceBar(
         background: Stack(
           fit: StackFit.expand,
@@ -79,9 +65,6 @@ class CustomAppBar extends StatelessWidget {
             ),
             HeaderAppBar(
               dateLabel: dateLabel,
-              doneCount: doneCount,
-              totalCount: totalCount,
-              pct: pct,
             ),
           ],
         ),

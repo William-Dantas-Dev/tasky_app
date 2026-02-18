@@ -70,16 +70,12 @@ class _ShellPageState extends State<ShellPage> {
       ),
     );
   }
-
-  // ✅ AppBar global (varia por aba)
+  
   Widget _buildAppBar() {
     switch (currentIndex) {
       case 0:
-        // Home usa seu CustomAppBar
         return CustomAppBar(
           dateLabel: "Home Page",
-          doneCount: 10,
-          totalCount: 20,
           progress: 2,
         );
 

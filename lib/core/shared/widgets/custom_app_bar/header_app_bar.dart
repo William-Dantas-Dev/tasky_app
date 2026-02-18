@@ -1,18 +1,9 @@
 import 'package:flutter/material.dart';
-
-import 'pill.dart';
-
 class HeaderAppBar extends StatelessWidget {
   final String dateLabel;
-  final int doneCount;
-  final int totalCount;
-  final int pct;
   const HeaderAppBar({
     super.key,
     required this.dateLabel,
-    required this.doneCount,
-    required this.totalCount,
-    required this.pct,
   });
 
   @override
@@ -38,17 +29,6 @@ class HeaderAppBar extends StatelessWidget {
               color: Colors.white70,
               fontWeight: FontWeight.w600,
             ),
-          ),
-          const Spacer(),
-          Row(
-            children: [
-              Pill(
-                icon: Icons.check_circle_outline_rounded,
-                text: '$doneCount/$totalCount concluídas',
-              ),
-              const SizedBox(width: 10),
-              Pill(icon: Icons.bolt_rounded, text: 'Ritmo: $pct%'),
-            ],
           ),
         ],
       ),
